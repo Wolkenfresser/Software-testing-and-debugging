@@ -1,0 +1,17 @@
+digraph classes {
+  graph [rankdir=TB, bgcolor="white", pad=0.25, nodesep=0.45, ranksep=0.7, fontname="Arial", fontsize=12, label="UML: структура приложения DataLens Lab", labelloc=t];
+  node [shape=record, style="rounded", color="#344054", fontcolor="#101828", fontname="Arial", fontsize=10, margin="0.12,0.08"];
+  edge [color="#475467", fontname="Arial", fontsize=9, arrowsize=0.8];
+  web [label="{DatasetWebApp| - loader: DatasetLoader\l - analyzer: DatasetAnalyzer\l - repository: DatasetRepository\l| + __call__()\l - _analyze()\l - _download()\l - _report_page()\l}"];
+  loader [label="{DatasetLoader| + MAX_FILE_BYTES\l + MAX_ROWS\l + MAX_COLUMNS\l| + load(filename, content)\l - _read_csv()\l}"];
+  analyzer [label="{DatasetAnalyzer| + PREVIEW_LIMIT\l| + analyze(frame, filter)\l - _number()\l - _display_value()\l}"];
+  repo [label="{DatasetRepository| - _items\l - _lock\l| + save()\l + get()\l + clear()\l}"];
+  report [label="{AnalysisReport (dataclass)| + rows, columns\l + missing_cells\l + numeric_stats\l + preview\l| }"];
+  errors [label="{Ошибки|DatasetValidationError\lAnalysisError\l|}"];
+  web -> loader [label="1"];
+  web -> analyzer [label="1"];
+  web -> repo [label="1"];
+  analyzer -> report [label="создаёт"];
+  loader -> errors [style=dashed,label="может выбросить"];
+  analyzer -> errors [style=dashed,label="может выбросить"];
+}

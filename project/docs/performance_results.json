@@ -1,0 +1,11 @@
+{
+  "rows": 10000,
+  "columns": 5,
+  "payload_bytes": 259625,
+  "runs": 5,
+  "status": "200 OK",
+  "median_seconds": 0.2568,
+  "min_seconds": 0.2371,
+  "max_seconds": 0.357,
+  "tracemalloc_peak_mib": 4.99
+}

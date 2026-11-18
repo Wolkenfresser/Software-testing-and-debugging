@@ -1,0 +1,63 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+class DatasetWebApp {
+  -loader: DatasetLoader
+  -analyzer: DatasetAnalyzer
+  -repository: DatasetRepository
+  +__call__(environ, start_response)
+  -_analyze(environ, start_response)
+  -_download(token, start_response)
+  -_report_page(report, token)
+}
+
+class DatasetLoader {
+  +ALLOWED_EXTENSIONS
+  +MAX_FILE_BYTES
+  +MAX_ROWS
+  +MAX_COLUMNS
+  +load(filename, content): DataFrame
+  -_read_csv(content): DataFrame
+}
+
+class DatasetAnalyzer {
+  +PREVIEW_LIMIT
+  +analyze(frame, title, filter_column, min_value, max_value): AnalysisReport
+  -_number(value)
+  -_display_value(value)
+}
+
+class DatasetRepository {
+  -_items
+  -_lock
+  +save(filename, frame): token
+  +get(token): Dataset
+  +clear()
+}
+
+class AnalysisReport <<dataclass>> {
+  +title
+  +original_rows
+  +rows
+  +columns
+  +missing_cells
+  +completeness_percent
+  +column_info
+  +numeric_stats
+  +preview
+  +numeric_columns
+  +filter_description
+}
+
+class DatasetValidationError <<exception>>
+class AnalysisError <<exception>>
+
+DatasetWebApp --> DatasetLoader : загрузка файла
+DatasetWebApp --> DatasetAnalyzer : анализ и фильтрация
+DatasetWebApp --> DatasetRepository : временное хранение
+DatasetAnalyzer ..> AnalysisReport : формирует
+DatasetLoader ..> DatasetValidationError : выбрасывает
+DatasetAnalyzer ..> AnalysisError : выбрасывает
+@enduml
